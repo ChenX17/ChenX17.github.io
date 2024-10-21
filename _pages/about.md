@@ -43,7 +43,7 @@ My research interest includes speech-to-speech translation, speech-to-text trans
 
 **Xi Chen**, Songyang Zhang, Qibing Bai, Kai Chen, Satoshi Nakamura
 
-<div class='paper-box'><div class='paper-box-image'><div><div class="badge">ICASSP2024</div><img src='images/ac.png' alt="sym" width="100%"></div></div>
+<div class='paper-box'><div class='paper-box-image'><div><div class="badge">ICASSP2024</div><img src='images/ac.png' alt="sym1" width="100%"></div></div>
 <div class='paper-box-text' markdown="1">
 
 [Transfer the linguistic representations from TTS to accent conversion with non-parallel data](https://arxiv.org/abs/2401.03538)
