@@ -36,14 +36,20 @@ My research interest includes speech-to-speech translation, speech-to-text trans
 
 # 📝 Publications 
 
-<div class='paper-box'>
-<div class='paper-box-image'>
-<div><div class="badge">ACL2024</div><img src='images/llast.png' alt="sym" width="100%"></div></div>
-<div class='paper-box-text' markdown="1">
+- **Xi Chen**, Songyang Zhang, Qibing Bai, Kai Chen, Satoshi Nakamura ["LLaST: Improved End-to-end Speech Translation System Leveraged by Large Language Models"](https://arxiv.org/abs/2407.15415) (Accepted by ACL 2024)
+[![](https://img.shields.io/github/stars/openaudiolab/LLaST?style=social&label=Code+Stars)](https://github.com/openaudiolab/LLaST)
 
-[LLaST: Improved End-to-end Speech Translation System Leveraged by Large Language Models](https://arxiv.org/abs/2407.15415)
+- **Xi Chen**, Jiakun Pei, Liumeng Xue, Mingyang Zhang ["Transfer the linguistic representations from TTS to accent conversion with non-parallel data"](https://arxiv.org/abs/2401.03538) (Accepted by ICASSP 2024)
 
-**Xi Chen**, Songyang Zhang, Qibing Bai, Kai Chen, Satoshi Nakamura
+- Xueyao Zhang, Liumeng Xue, Yicheng Gu, Yuancheng Wang, Jiaqi Li, Haorui He, Chaoren Wang, Songting Liu, **Xi Chen**, et al. ["Amphion: An Open-Source Audio, Music and Speech Generation Toolkit"](https://arxiv.org/abs/2312.09911) (Accepted by SLT 2024)
+[![](https://img.shields.io/github/stars/open-mmlab/Amphion?style=social&label=Code+Stars)](https://github.com/open-mmlab/Amphion)
+
+- Huiyu Shi, **Xi Chen**, Tianlong Kong, Shouyi Yin, Peng Ouyang ["GLMSnet: Single Channel Speech Separation Framework in Noisy and Reverberant Environments"](https://ieeexplore.ieee.org/document/9688217) (Accepted by ASRU 2021)
+
+- **Xi Chen**, Songyang Zhang, Dandan Song, Peng Ouyang, Shouyi Yin ["Transformer with bidirectional decoder for speech recognition"](https://arxiv.org/abs/2008.04481) (Accepted by ASRU 2020)
+
+- **Xi Chen**, Shouyi Yin, Dandan Song, Peng Ouyang, Leibo Liu, Shaojun Wei ["Small-footprint keyword spotting with graph convolutional network"](https://arxiv.org/abs/1912.05124) (Accepted by ASRU 2019)
+
 
 <!-- <div><div class="badge">ICASSP2024</div><img src='images/ac.png' alt="sym_1" width="100%"></div></div>
 <div class='paper-box-text' markdown="1">
@@ -59,7 +65,7 @@ My research interest includes speech-to-speech translation, speech-to-text trans
 
 **Xi Chen**, Jiakun Pei, Liumeng Xue, Mingyang Zhang -->
 
-[**Project**](https://scholar.google.com/citations?view_op=view_citation&hl=zh-CN&user=DhtAFkwAAAAJ&citation_for_view=DhtAFkwAAAAJ:ALROH1vI_8AC) <strong><span class='show_paper_citations' data='DhtAFkwAAAAJ:ALROH1vI_8AC'></span></strong>
+<!-- [**Project**](https://scholar.google.com/citations?view_op=view_citation&hl=zh-CN&user=DhtAFkwAAAAJ&citation_for_view=DhtAFkwAAAAJ:ALROH1vI_8AC) <strong><span class='show_paper_citations' data='DhtAFkwAAAAJ:ALROH1vI_8AC'></span></strong>
 - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet. 
 </div>
 </div>
@@ -75,4 +81,6 @@ My research interest includes speech-to-speech translation, speech-to-text trans
 - *2021.03*, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet.  \| [\[video\]](https://github.com/)
 
 # 💻 Internships
-- *2019.05 - 2020.02*, [Lorem](https://github.com/), China.
+- *2019.05 - 2020.02*, [Lorem](https://github.com/), China. -->
+
+# 🧑‍🏫 Teaching
