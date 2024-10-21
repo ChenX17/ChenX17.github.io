@@ -17,23 +17,31 @@ redirect_from:
 
 <span class='anchor' id='about-me'></span>
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet. Suspendisse condimentum, libero vel tempus mattis, risus risus vulputate libero, elementum fermentum mi neque vel nisl. Maecenas facilisis maximus dignissim. Curabitur mattis vulputate dui, tincidunt varius libero luctus eu. Mauris mauris nulla, scelerisque eget massa id, tincidunt congue felis. Sed convallis tempor ipsum rhoncus viverra. Pellentesque nulla orci, accumsan volutpat fringilla vitae, maximus sit amet tortor. Aliquam ultricies odio ut volutpat scelerisque. Donec nisl nisl, porttitor vitae pharetra quis, fringilla sed mi. Fusce pretium dolor ut aliquam consequat. Cras volutpat, tellus accumsan mattis molestie, nisl lacus tempus massa, nec malesuada tortor leo vel quam. Aliquam vel ex consectetur, vehicula leo nec, efficitur eros. Donec convallis non urna quis feugiat.
+I am currently start my third year of PhD in School of Data Science, The Chinese University of Hong Kong (Shenzhen).
+My chief supervisor is <a href="https://sds.cuhk.edu.cn/en/teacher/1185">Prof. Satoshi Nakamura</a> and co-supervisor is <a href="https://www.colips.org/~eleliha/">Prof. Haizhou Li</a>. 
+I completed my bachelor’s degree at the School <a href="http://www.ee.buaa.edu.cn/">Electronic and Information Engineering</a>, <a href="https://www.buaa.edu.cn/">Beihang University</a>,
+And then I completed my master’s degree in <a href="https://www.sic.tsinghua.edu.cn/index.htm">Integrated Circuit Engineering</a> from <a href="https://www.tsinghua.edu.cn/">Tsinghua University</a>, supervised by <a href="https://scholar.google.com/citations?user=9_QZc-oAAAAJ&hl=en" target="_blank">Prof. Shouyi Yin</a>, in 2020. From 2020 to 2022, I worked as a speech algorithm engineer at Lenovo and Meituan.
 
-My research interest includes neural machine translation and computer vision. I have published more than 100 papers at the top international AI conferences with total <a href='https://scholar.google.com/citations?user=DhtAFkwAAAAJ'>google scholar citations <strong><span id='total_cit'>260000+</span></strong></a> (You can also use google scholar badge <a href='https://scholar.google.com/citations?user=DhtAFkwAAAAJ'><img src="https://img.shields.io/endpoint?url={{ url | url_encode }}&logo=Google%20Scholar&labelColor=f6f6f6&color=9cf&style=flat&label=citations"></a>).
+My research interest includes speech-to-speech translation, speech-to-text translation, and speech generation. <a href='https://scholar.google.com/citations?user=JMDsgOMAAAAJ'><img src="https://img.shields.io/endpoint?url={{ url | url_encode }}&logo=Google%20Scholar&labelColor=f6f6f6&color=9cf&style=flat&label=citations"></a>.
 
 
 # 🔥 News
 - *2022.02*: &nbsp;🎉🎉 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet. 
-- *2022.02*: &nbsp;🎉🎉 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet. 
+- *2022.02*: &nbsp;🎉🎉 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet.
+
+# 📖 Educations
+- *2022.09 - 2024.10 (now)*, Ph.D candidate at School of Data Science, The Chinese University of Hong Kong (Shenzhen), Shenzhen.
+- *2017.09 - 2020.06*, M.E. in <a href="https://www.sic.tsinghua.edu.cn/index.htm">Integrated Circuit Engineering</a>, <a href="https://www.tsinghua.edu.cn/">Tsinghua University</a>, Beijing.
+- *2013.09 - 2017.06*, B.E. in the School <a href="http://www.ee.buaa.edu.cn/">Electronic and Information Engineering</a>, <a href="https://www.buaa.edu.cn/">Beihang University</a>, Beijing.
 
 # 📝 Publications 
 
-<div class='paper-box'><div class='paper-box-image'><div><div class="badge">CVPR 2016</div><img src='images/500x300.png' alt="sym" width="100%"></div></div>
+<div class='paper-box'><div class='paper-box-image'><div><div class="badge">ACL2024</div><img src='images/llast.png' alt="sym" width="100%"></div></div>
 <div class='paper-box-text' markdown="1">
 
-[Deep Residual Learning for Image Recognition](https://openaccess.thecvf.com/content_cvpr_2016/papers/He_Deep_Residual_Learning_CVPR_2016_paper.pdf)
+[LLaST: Improved End-to-end Speech Translation System Leveraged by Large Language Models](https://arxiv.org/abs/2407.15415)
 
-**Kaiming He**, Xiangyu Zhang, Shaoqing Ren, Jian Sun
+**Xi Chen**, Songyang Zhang, Qibing Bai, Kai Chen, Satoshi Nakamura
 
 [**Project**](https://scholar.google.com/citations?view_op=view_citation&hl=zh-CN&user=DhtAFkwAAAAJ&citation_for_view=DhtAFkwAAAAJ:ALROH1vI_8AC) <strong><span class='show_paper_citations' data='DhtAFkwAAAAJ:ALROH1vI_8AC'></span></strong>
 - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet. 
@@ -45,10 +53,6 @@ My research interest includes neural machine translation and computer vision. I 
 # 🎖 Honors and Awards
 - *2021.10* Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet. 
 - *2021.09* Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet. 
-
-# 📖 Educations
-- *2019.06 - 2022.04 (now)*, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet. 
-- *2015.09 - 2019.06*, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet. 
 
 # 💬 Invited Talks
 - *2021.06*, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet. 
