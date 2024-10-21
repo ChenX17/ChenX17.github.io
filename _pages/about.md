@@ -45,12 +45,19 @@ My research interest includes speech-to-speech translation, speech-to-text trans
 
 **Xi Chen**, Songyang Zhang, Qibing Bai, Kai Chen, Satoshi Nakamura
 
-<div><div class="badge">ICASSP2024</div><img src='images/ac.png' alt="sym" width="100%"></div></div>
+<!-- <div><div class="badge">ICASSP2024</div><img src='images/ac.png' alt="sym_1" width="100%"></div></div>
 <div class='paper-box-text' markdown="1">
 
 [Transfer the linguistic representations from TTS to accent conversion with non-parallel data](https://arxiv.org/abs/2401.03538)
 
 **Xi Chen**, Jiakun Pei, Liumeng Xue, Mingyang Zhang
+
+<div><div class="badge">SLT2024</div><img src='images/ac.png' alt="sym_1" width="100%"></div></div>
+<div class='paper-box-text' markdown="1">
+
+[Transfer the linguistic representations from TTS to accent conversion with non-parallel data](https://arxiv.org/abs/2401.03538)
+
+**Xi Chen**, Jiakun Pei, Liumeng Xue, Mingyang Zhang -->
 
 [**Project**](https://scholar.google.com/citations?view_op=view_citation&hl=zh-CN&user=DhtAFkwAAAAJ&citation_for_view=DhtAFkwAAAAJ:ALROH1vI_8AC) <strong><span class='show_paper_citations' data='DhtAFkwAAAAJ:ALROH1vI_8AC'></span></strong>
 - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet. 
