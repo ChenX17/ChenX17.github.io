@@ -90,3 +90,8 @@ My research interest includes speech-to-speech translation, speech-to-text trans
 - *2019.05 - 2020.02*, [Lorem](https://github.com/), China. -->
 
 # 🧑‍🏫 Teaching
+
+- Leading TA, AIR6001 Advanced Artificial Intelligence, Fall 2024
+- TA, CSC3160 Fundamentals of Speech and Language Processing, Spring 2023
+- TA, CSC3100 Data Structures, Fall 2022, Fall 2023
+- TA, DDA2003 Visual Analytics_L01, Spring 2024
