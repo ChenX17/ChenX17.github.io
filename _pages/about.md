@@ -26,8 +26,9 @@ My research interest includes speech-to-speech translation, speech-to-text trans
 
 
 # 🔥 News
-- *2022.02*: &nbsp;🎉🎉 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet. 
-- *2022.02*: &nbsp;🎉🎉 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet.
+- *2024.08*: &nbsp;🎉🎉 We release training [codes](https://github.com/openaudiolab/LLaST) with the hope of contributing to the language model-based speech translation community.
+- *2024.05*: &nbsp;🎉🎉 Our speech-to-text translation paper is accepted by ACL 2024.
+- *2023.12*: &nbsp;🎉🎉 Our accent conversion paper is accepted by ICASSP 2024.
 
 # 📖 Educations
 - *2022.09 - 2024.10 (now)*, Ph.D candidate at School of Data Science, The Chinese University of Hong Kong (Shenzhen), Shenzhen.
@@ -88,6 +89,10 @@ My research interest includes speech-to-speech translation, speech-to-text trans
 
 # 💻 Internships
 - *2019.05 - 2020.02*, [Lorem](https://github.com/), China. -->
+
+# 🎖 Honors and Awards
+- Duan Yong Ping Travel Award, 2024
+- National Encouragement Scholarship in China, 2016
 
 # 🧑‍🏫 Teaching
 
