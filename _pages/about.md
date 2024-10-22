@@ -46,9 +46,15 @@ My research interest includes speech-to-speech translation, speech-to-text trans
 
 - Huiyu Shi, **Xi Chen**, Tianlong Kong, Shouyi Yin, Peng Ouyang ["GLMSnet: Single Channel Speech Separation Framework in Noisy and Reverberant Environments"](https://ieeexplore.ieee.org/document/9688217) (Accepted by ASRU 2021)
 
-- **Xi Chen**, Songyang Zhang, Dandan Song, Peng Ouyang, Shouyi Yin ["Transformer with bidirectional decoder for speech recognition"](https://arxiv.org/abs/2008.04481) (Accepted by ASRU 2020)
+- **Xi Chen**, Songyang Zhang, Dandan Song, Peng Ouyang, Shouyi Yin ["Transformer with bidirectional decoder for speech recognition"](https://arxiv.org/abs/2008.04481) (Accepted by InterSpeech 2020)
 
 - **Xi Chen**, Shouyi Yin, Dandan Song, Peng Ouyang, Leibo Liu, Shaojun Wei ["Small-footprint keyword spotting with graph convolutional network"](https://arxiv.org/abs/1912.05124) (Accepted by ASRU 2019)
+
+- Zeqing Zhao\*, **Xi Chen\***, Hui Liu, Xuyang Wang, Lin Yang, Junjie Wang [Sptts: Parallel speech synthesis without extra aligner model](http://www.apsipa.org/proceedings/2021/pdfs/0000864.pdf) (Accepted by APSIPA ASC 2021)
+
+- Ruiqi Guo, Yonggang Liu, Shixuan Zheng, Ssu-Yen Wu, Peng Ouyang, Win-San Khwa, **Xi Chen**, et al. [A 5.1 pJ/neuron 127.3 us/inference RNN-based speech recognition processor using 16 computing-in-memory SRAM macros in 65nm CMOS](https://ieeexplore.ieee.org/abstract/document/8778028) (Accepted by VLSI 2019)
+
+
 
 
 <!-- <div><div class="badge">ICASSP2024</div><img src='images/ac.png' alt="sym_1" width="100%"></div></div>
