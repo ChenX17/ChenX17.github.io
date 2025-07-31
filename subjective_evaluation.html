@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文本质量主观评测</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .controls {
+            padding: 20px 30px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .file-input {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-input-label {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            font-weight: 500;
+        }
+
+        .file-input-label:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .progress-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .progress-bar {
+            width: 200px;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745, #20c997);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .evaluation-item {
+            padding: 30px;
+            border-bottom: 1px solid #e9ecef;
+            transition: background 0.3s ease;
+        }
+
+        .evaluation-item:hover {
+            background: #f8f9fa;
+        }
+
+        .evaluation-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .item-number {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .model-badge {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .single-model-output {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #007bff;
+            margin-bottom: 25px;
+        }
+
+        .models-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 25px;
+        }
+
+        .model-output {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #007bff;
+        }
+
+        .model-output.model-b {
+            border-left-color: #28a745;
+        }
+
+        .model-title {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .model-text {
+            line-height: 1.6;
+            color: #212529;
+            white-space: pre-wrap;
+        }
+
+        .rating-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+        }
+
+        .rating-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #495057;
+        }
+
+        .rating-options {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .rating-option {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .rating-option input[type="radio"] {
+            display: none;
+        }
+
+        .rating-option label {
+            display: block;
+            padding: 12px 8px;
+            text-align: center;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            background: white;
+        }
+
+        .rating-option input[type="radio"]:checked + label {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border-color: #4facfe;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 172, 254, 0.3);
+        }
+
+        .rating-option label:hover {
+            border-color: #4facfe;
+            transform: translateY(-1px);
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 60px 30px;
+            color: #6c757d;
+        }
+
+        .no-data h3 {
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .upload-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 768px) {
+            .models-comparison {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .progress-info {
+                justify-content: center;
+            }
+            
+            .rating-options {
+                flex-direction: column;
+            }
+            
+            .rating-option {
+                min-width: auto;
+            }
+        }
+
+        .reference-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-left: 4px solid #007bff;
+            border-radius: 5px;
+        }
+
+        .reference-title {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 8px;
+        }
+
+        .reference-text {
+            color: #6c757d;
+            font-style: italic;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .bottom-download-section {
+            margin-top: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .bottom-download-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .completion-info h3 {
+            color: white;
+            font-size: 24px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .completion-info p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 16px;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .btn-large {
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-large:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 用户信息区域样式 */
+        .user-info-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+
+        .username-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .username-input-wrapper label {
+            font-weight: 600;
+            color: #495057;
+            white-space: nowrap;
+        }
+
+        .username-input {
+            flex: 1;
+            max-width: 300px;
+            padding: 8px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+
+        .username-input:focus {
+            outline: 0;
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        /* 示例区域样式 */
+        .examples-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 1px solid #e9ecef;
+        }
+
+        .examples-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .examples-header h3 {
+            color: #495057;
+            margin-bottom: 10px;
+        }
+
+        .examples-header p {
+            color: #6c757d;
+            font-size: 0.95em;
+        }
+
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .example-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .example-title {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 12px;
+            font-size: 1.1em;
+        }
+
+        .example-sentence {
+            font-size: 1.05em;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 3px solid #007bff;
+        }
+
+        .stress-word {
+            color: #dc3545;
+            font-weight: bold;
+            background: #fff3cd;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        .example-options {
+            margin-bottom: 15px;
+        }
+
+        .option {
+            padding: 8px 12px;
+            margin: 5px 0;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 2px solid #6c757d;
+            font-size: 0.95em;
+        }
+
+        .example-analysis {
+            font-style: italic;
+            color: #6c757d;
+            margin-bottom: 10px;
+            padding: 8px;
+            background: #e9ecef;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+
+        .example-answer {
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .answer-highlight {
+            background: #28a745;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+            color: white;
+            border: none;
+        }
+
+        .btn-info:hover {
+            background: linear-gradient(135deg, #138496 0%, #117a8b 100%);
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>文本质量主观评测</h1>
+            <p>请分析以下中文句子中被*包围的强调词的可能的意图，并从给定选项中选择最符合的答案。</p>
+        </div>
+
+        <div class="controls">
+            <div class="user-info-section">
+                <div class="username-input-wrapper">
+                    <label for="usernameInput">👤 评估员姓名：</label>
+                    <input type="text" id="usernameInput" placeholder="请输入您的姓名" class="username-input">
+                </div>
+            </div>
+            
+            <div class="file-input-wrapper">
+                <button class="btn btn-primary" id="loadDataBtn" onclick="loadDefaultData()">📊 加载评测数据</button>
+                <button class="btn btn-info" id="examplesBtn" onclick="toggleExamples()" style="margin-left: 10px;">📖 查看示例</button>
+            </div>
+            
+            <div class="progress-info">
+                <span id="progressText">进度: 0/0</span>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <button class="btn btn-success" id="downloadBtn" disabled onclick="downloadResults()">📥 下载结果</button>
+            </div>
+        </div>
+
+        <div id="examplesSection" class="examples-section" style="display: none;">
+            <div class="examples-header">
+                <h3>📖 中文强调意图分析示例</h3>
+                <p>请分析以下中文句子中被*包围的强调词的可能的意图，并从给定选项中选择最符合的答案。</p>
+            </div>
+            
+            <div class="examples-grid">
+                <div class="example-card">
+                    <div class="example-title">示例1</div>
+                    <div class="example-sentence">句子：我没有说他<span class="stress-word">*偷*</span>了钱。</div>
+                    <div class="example-options">
+                        <div class="option">1. 可能是借的或者捡到的，但他没有偷。</div>
+                        <div class="option">2. 是别人偷的，不是他。</div>
+                        <div class="option">3. 以上都不是</div>
+                    </div>
+                    <div class="example-analysis">分析：强调"偷"这个动作，暗示他可能通过其他方式获得钱财，但不是偷窃</div>
+                    <div class="example-answer">正确答案：<span class="answer-highlight">1</span></div>
+                </div>
+
+                <div class="example-card">
+                    <div class="example-title">示例2</div>
+                    <div class="example-sentence">句子：不是<span class="stress-word">*我*</span>拿走了你的书。</div>
+                    <div class="example-options">
+                        <div class="option">1. 可能是找到或借来的。</div>
+                        <div class="option">2. 也可能是别人拿的，但不是我。</div>
+                        <div class="option">3. 以上都不是</div>
+                    </div>
+                    <div class="example-analysis">分析：强调"我"，暗示是别人而不是说话者本人</div>
+                    <div class="example-answer">正确答案：<span class="answer-highlight">2</span></div>
+                </div>
+
+                <div class="example-card">
+                    <div class="example-title">示例3</div>
+                    <div class="example-sentence">句子：我没有<span class="stress-word">*偷*</span>这辆车。</div>
+                    <div class="example-options">
+                        <div class="option">1. 我借了这辆车。</div>
+                        <div class="option">2. 我偷了另一辆不同的车。</div>
+                        <div class="option">3. 以上都不是</div>
+                    </div>
+                    <div class="example-analysis">分析：强调"偷"这个动作，暗示通过合法方式（借用）获得车辆</div>
+                    <div class="example-answer">正确答案：<span class="answer-highlight">1</span></div>
+                </div>
+
+                <div class="example-card">
+                    <div class="example-title">示例4</div>
+                    <div class="example-sentence">句子：她<span class="stress-word">*说*</span>她很抱歉。</div>
+                    <div class="example-options">
+                        <div class="option">1. 是她道歉了，而不是别人。</div>
+                        <div class="option">2. 她并不是真心的。</div>
+                        <div class="option">3. 以上都不是</div>
+                    </div>
+                    <div class="example-analysis">分析：强调"说"这个动作，暗示只是口头表达，可能不是真心的</div>
+                    <div class="example-answer">正确答案：<span class="answer-highlight">2</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="evaluationContainer">
+            <div class="no-data">
+                <div class="upload-icon">📊</div>
+                <h3>点击加载评测数据</h3>
+                <p>将自动加载gemini.jsonl和stresstransfer.jsonl进行对比评测，优先选择未评估样本（missing samples）</p>
+            </div>
+        </div>
+        
+        <div id="bottomDownloadSection" class="bottom-download-section" style="display: none;">
+            <div class="bottom-download-content">
+                <div class="completion-info">
+                    <h3>🎉 评测完成</h3>
+                    <p>感谢您的参与！您可以下载评测结果进行进一步分析。</p>
+                </div>
+                <button class="btn btn-success btn-large" id="bottomDownloadBtn" onclick="downloadResults()">📥 下载评测结果</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script>
+        let evaluationData = [];
+        let results = {};
+        let geminiData = [];
+        let stresstransferData = [];
+
+        async function loadDefaultData() {
+            try {
+                showToast('正在加载数据...', 'info');
+                
+                // 首先加载voting_analysis_results.json获取missing samples列表
+                let missingGeminiSamples = [];
+                let missingStressTransferSamples = [];
+                
+                try {
+                    const votingAnalysisResponse = await fetch('results/voting_analysis_results.json');
+                    const votingAnalysisData = await votingAnalysisResponse.json();
+                    missingGeminiSamples = votingAnalysisData.gemini_missing_samples || [];
+                    missingStressTransferSamples = votingAnalysisData.stresstransfer_missing_samples || [];
+                    showToast(`加载到 ${missingGeminiSamples.length} 个Gemini未评估样本，${missingStressTransferSamples.length} 个StressTransfer未评估样本`, 'info');
+                } catch (error) {
+                    console.warn('无法加载voting_analysis_results.json，将使用所有可用样本:', error);
+                    showToast('未找到missing samples列表，将使用所有可用样本', 'info');
+                }
+                
+                // 加载gemini.jsonl
+                const geminiResponse = await fetch('gemini.jsonl');
+                const geminiText = await geminiResponse.text();
+                geminiData = geminiText.trim().split('\n').map(line => JSON.parse(line));
+                
+                // 加载stresstransfer.jsonl
+                const stresstransferResponse = await fetch('stresstransfer.jsonl');
+                const stresstransferText = await stresstransferResponse.text();
+                stresstransferData = stresstransferText.trim().split('\n').map(line => JSON.parse(line));
+                
+                // 创建单独标注数据，混合两个模型
+                evaluationData = [];
+                
+                // 创建stresstransfer数据的ID映射
+                const stresstransferMap = {};
+                stresstransferData.forEach(item => {
+                    stresstransferMap[item.id] = item;
+                });
+                
+                // 收集所有匹配的数据对
+                const allPairs = [];
+                const priorityPairs = []; // 优先级样本（missing samples）
+                const regularPairs = []; // 常规样本
+                
+                geminiData.forEach(geminiItem => {
+                    const stresstransferItem = stresstransferMap[geminiItem.id];
+                    if (stresstransferItem) {
+                        const pair = {
+                            id: geminiItem.id,
+                            gemini: geminiItem,
+                            stresstransfer: stresstransferItem
+                        };
+                        
+                        // 检查是否为missing sample
+                        const isGeminiMissing = missingGeminiSamples.includes(geminiItem.id);
+                        const isStressTransferMissing = missingStressTransferSamples.includes(geminiItem.id);
+                        
+                        if (isGeminiMissing || isStressTransferMissing) {
+                            priorityPairs.push(pair);
+                        } else {
+                            regularPairs.push(pair);
+                        }
+                    }
+                });
+                
+                // 优先选择missing samples，然后补充常规样本
+                const shuffledPriorityPairs = priorityPairs.sort(() => Math.random() - 0.5);
+                const shuffledRegularPairs = regularPairs.sort(() => Math.random() - 0.5);
+                
+                // 合并样本，优先级样本在前
+                const combinedPairs = [...shuffledPriorityPairs, ...shuffledRegularPairs];
+                
+                // 选择50条数据（优先从missing samples中选择）
+                const selectedPairs = combinedPairs.slice(0, 50);
+                
+                showToast(`优先选择了 ${Math.min(shuffledPriorityPairs.length, 50)} 个missing samples，共选择 ${selectedPairs.length} 个样本对`, 'success');
+                
+                // 为每条数据创建两个评测项（每个模型一个），保持配对关系
+                const allItems = [];
+                selectedPairs.forEach((pair, pairIndex) => {
+                    // 为每对数据随机决定模型顺序
+                    const modelOrder = Math.random() < 0.5 ? ['Gemini', 'StressTransfer'] : ['StressTransfer', 'Gemini'];
+                    
+                    modelOrder.forEach((modelName, modelIndex) => {
+                        const modelData = modelName === 'Gemini' ? pair.gemini : pair.stresstransfer;
+                        allItems.push({
+                            id: pair.id + '_' + modelName.toLowerCase(),
+                            original_id: pair.id,
+                            pair_index: pairIndex,
+                            model_index: modelIndex, // 0 或 1，表示在该对中的位置
+                            model_name: modelName,
+                            prediction: modelData.prediction,
+                            chinese_possible_answers: modelData.chinese_possible_answers || [],
+                            references: modelData.references
+                        });
+                    });
+                });
+                
+                // 不完全随机打乱，而是按配对顺序排列
+                evaluationData = allItems;
+                
+                if (evaluationData.length === 0) {
+                    throw new Error('没有找到匹配的数据');
+                }
+                
+                results = {};
+                renderEvaluationItems();
+                updateProgress();
+                showToast(`成功加载 ${evaluationData.length} 条评测数据！`, 'success');
+                
+            } catch (error) {
+                showToast('数据加载失败: ' + error.message, 'error');
+                console.error('加载数据时出错:', error);
+            }
+        }
+
+        function highlightStressWords(text) {
+            if (!text) return text;
+            // 匹配被*包围的词语，并将其高亮显示
+            return text.replace(/\*(.*?)\*/g, '<span class="stress-word">*$1*</span>');
+        }
+
+        function renderEvaluationItems() {
+            const container = document.getElementById('evaluationContainer');
+            
+            if (evaluationData.length === 0) {
+                container.innerHTML = `
+                    <div class="no-data">
+                        <div class="upload-icon">📊</div>
+                        <h3>点击加载评测数据</h3>
+                        <p>将自动加载gemini.jsonl和stresstransfer.jsonl进行配对评测，优先选择未评估样本（missing samples）进行评测</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = evaluationData.map((item, index) => {
+                const options = item.chinese_possible_answers || [];
+                const optionsHtml = options.map((option, optionIndex) => `
+                    <div class="rating-option">
+                        <input type="radio" id="item${index}_option${optionIndex}" name="item${index}" value="${optionIndex + 1}" onchange="updateRating(${index}, '${optionIndex + 1}')">
+                        <label for="item${index}_option${optionIndex}">${optionIndex + 1}. ${option}</label>
+                    </div>
+                `).join('');
+                
+                const noneOption = `
+                    <div class="rating-option">
+                        <input type="radio" id="item${index}_none" name="item${index}" value="以上都不是" onchange="updateRating(${index}, '以上都不是')">
+                        <label for="item${index}_none">以上都不是</label>
+                    </div>
+                `;
+                
+                return `
+                    <div class="evaluation-item">
+                        <div class="item-header">
+                            <div class="item-number">样本 ${index + 1} (原始ID: ${item.original_id})</div>
+                            <!-- 隐藏模型名字 <div class="model-badge">${item.model_name}</div> -->
+                        </div>
+                        
+                        <div class="single-model-output">
+                            <div class="model-text">${highlightStressWords(item.prediction) || '无内容'}</div>
+                        </div>
+                        
+                        ${/* 隐藏参考答案
+                        item.references ? `
+                            <div class="reference-section">
+                                <div class="reference-title">参考答案：</div>
+                                <div class="reference-text">${item.references}</div>
+                            </div>
+                        ` : '' */
+                        ''}
+                        
+                        <div class="rating-section">
+                            <div class="rating-title">请选择最符合强调意图的答案：</div>
+                            <div class="rating-options">
+                                ${optionsHtml}
+                                ${noneOption}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateRating(index, rating) {
+            results[index] = rating;
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const total = evaluationData.length;
+            const completed = Object.keys(results).length;
+            const percentage = total > 0 ? (completed / total) * 100 : 0;
+            
+            document.getElementById('progressText').textContent = `进度: ${completed}/${total}`;
+            document.getElementById('progressFill').style.width = `${percentage}%`;
+            
+            const downloadBtn = document.getElementById('downloadBtn');
+            downloadBtn.disabled = completed === 0;
+            
+            // 显示或隐藏底部下载区域
+            const bottomDownloadSection = document.getElementById('bottomDownloadSection');
+            if (completed === total && total > 0) {
+                bottomDownloadSection.style.display = 'block';
+                // 平滑滚动到底部
+                setTimeout(() => {
+                    bottomDownloadSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
+            } else {
+                bottomDownloadSection.style.display = 'none';
+            }
+        }
+
+        function downloadResults() {
+            if (Object.keys(results).length === 0) {
+                showToast('请先完成至少一个评测', 'error');
+                return;
+            }
+
+            const username = document.getElementById('usernameInput').value.trim();
+            if (!username) {
+                showToast('请先输入用户名', 'error');
+                return;
+            }
+
+            const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+            const resultText = generateResultText();
+            
+            const blob = new Blob([resultText], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `evaluation_results_${username}_${timestamp}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            
+            URL.revokeObjectURL(url);
+            showToast('结果已下载！', 'success');
+        }
+
+        function generateResultText() {
+             const timestamp = new Date().toLocaleString('zh-CN');
+            let text = `强调意图分析主观评测结果（单模型混合评测）\n`;
+            text += `评测时间: ${timestamp}\n`;
+            text += `总样本数: ${evaluationData.length}\n`;
+            text += `已评测数: ${Object.keys(results).length}\n\n`;
+            
+            // 按模型统计结果
+            const geminiStats = {};
+            const stresstransferStats = {};
+            const allStats = {};
+            
+            Object.entries(results).forEach(([index, result]) => {
+                const item = evaluationData[index];
+                allStats[result] = (allStats[result] || 0) + 1;
+                
+                if (item.model_name === 'Gemini') {
+                    geminiStats[result] = (geminiStats[result] || 0) + 1;
+                } else if (item.model_name === 'StressTransfer') {
+                    stresstransferStats[result] = (stresstransferStats[result] || 0) + 1;
+                }
+            });
+            
+            text += `总体评测统计:\n`;
+            Object.entries(allStats).forEach(([option, count]) => {
+                const percentage = (count / Object.keys(results).length * 100).toFixed(1);
+                text += `选项 "${option}": ${count} (${percentage}%)\n`;
+            });
+            
+            text += `\nGemini模型统计:\n`;
+            Object.entries(geminiStats).forEach(([option, count]) => {
+                const geminiTotal = Object.values(geminiStats).reduce((a, b) => a + b, 0);
+                const percentage = geminiTotal > 0 ? (count / geminiTotal * 100).toFixed(1) : '0.0';
+                text += `选项 "${option}": ${count} (${percentage}%)\n`;
+            });
+            
+            text += `\nStressTransfer模型统计:\n`;
+             Object.entries(stresstransferStats).forEach(([option, count]) => {
+                 const stTotal = Object.values(stresstransferStats).reduce((a, b) => a + b, 0);
+                 const percentage = stTotal > 0 ? (count / stTotal * 100).toFixed(1) : '0.0';
+                 text += `选项 "${option}": ${count} (${percentage}%)\n`;
+             });
+             
+             // 配对分析
+             text += `\n配对分析（相同原始ID的两个模型对比）:\n`;
+             const pairAnalysis = {};
+             const pairResults = {};
+             
+             // 按pair_index分组结果
+             Object.entries(results).forEach(([index, result]) => {
+                 const item = evaluationData[index];
+                 if (item.pair_index !== undefined) {
+                     if (!pairResults[item.pair_index]) {
+                         pairResults[item.pair_index] = {};
+                     }
+                     pairResults[item.pair_index][item.model_name] = result;
+                     pairResults[item.pair_index].original_id = item.original_id;
+                 }
+             });
+             
+             // 分析配对结果
+             let bothEvaluated = 0;
+             let geminiWins = 0;
+             let stresstransferWins = 0;
+             let ties = 0;
+             
+             Object.values(pairResults).forEach(pair => {
+                 if (pair.Gemini && pair.StressTransfer) {
+                     bothEvaluated++;
+                     if (pair.Gemini === pair.StressTransfer) {
+                         ties++;
+                     } else {
+                         // 这里可以根据具体的评分标准来判断胜负
+                         // 暂时简单比较选项
+                     }
+                 }
+             });
+             
+             text += `完成配对评测的样本数: ${bothEvaluated}\n`;
+             text += `两模型评测结果相同的样本数: ${ties}\n`;
+             text += `\n`;
+            
+            // 详细结果
+            text += `详细评测结果:\n`;
+            text += `${'='.repeat(50)}\n`;
+            
+            for (let i = 0; i < evaluationData.length; i++) {
+                const item = evaluationData[i];
+                const result = results[i] || '未评测';
+                
+                text += `\n样本 ${i + 1} (原始ID: ${item.original_id}, 模型: ${item.model_name}):\n`;
+                text += `模型输出: ${item.prediction}\n`;
+                if (item.references) {
+                    text += `参考答案: ${item.references}\n`;
+                }
+                text += `可选答案:\n`;
+                item.chinese_possible_answers.forEach((answer, index) => {
+                    text += `  ${index + 1}. ${answer}\n`;
+                });
+                text += `  以上都不是\n`;
+                text += `评测结果: ${result}\n`;
+                text += `${'-'.repeat(30)}\n`;
+            }
+            
+            return text;
+        }
+
+        function toggleExamples() {
+            const examplesSection = document.getElementById('examplesSection');
+            const examplesBtn = document.getElementById('examplesBtn');
+            
+            if (examplesSection.style.display === 'none') {
+                examplesSection.style.display = 'block';
+                examplesBtn.textContent = '📖 隐藏示例';
+                showToast('示例已展开，请参考分析方法', 'info');
+            } else {
+                examplesSection.style.display = 'none';
+                examplesBtn.textContent = '📖 查看示例';
+            }
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            
+            switch(type) {
+                case 'success':
+                    toast.style.background = '#28a745';
+                    break;
+                case 'error':
+                    toast.style.background = '#dc3545';
+                    break;
+                case 'info':
+                    toast.style.background = '#17a2b8';
+                    break;
+                default:
+                    toast.style.background = '#28a745';
+            }
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // 初始化
+        updateProgress();
+    </script>
+</body>
+</html>
