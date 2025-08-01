@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>音频质量主观评测</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .controls {
+            padding: 20px 30px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .load-btn {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .load-btn:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .progress-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .progress-bar {
+            width: 200px;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745, #20c997);
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .progress-text {
+            font-weight: 500;
+            color: #495057;
+        }
+
+        .username-input {
+            padding: 8px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 20px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .username-input:focus {
+            border-color: #007bff;
+        }
+
+        .download-btn {
+            background: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .download-btn:hover:not(:disabled) {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        .download-btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .evaluation-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .evaluation-item:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .item-number {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .audio-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 25px;
+        }
+
+        .audio-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #e9ecef;
+            text-align: center;
+        }
+
+        .audio-label {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 15px;
+        }
+
+        .audio-player {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .audio-info {
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+
+        .rating-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #e9ecef;
+        }
+
+        .rating-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .rating-options {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .rating-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 15px;
+            background: #f8f9fa;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .rating-option:hover {
+            background: #e9ecef;
+        }
+
+        .rating-option input[type="radio"] {
+            margin: 0;
+        }
+
+        .rating-option input[type="radio"]:checked + label {
+            color: #007bff;
+            font-weight: 600;
+        }
+
+        .rating-option:has(input[type="radio"]:checked) {
+            background: #e3f2fd;
+            border-color: #007bff;
+        }
+
+        .rating-option label {
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6c757d;
+        }
+
+        .upload-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .no-data h3 {
+            margin-bottom: 10px;
+            color: #495057;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 5px;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.success {
+            background: #28a745;
+        }
+
+        .toast.error {
+            background: #dc3545;
+        }
+
+        .toast.info {
+            background: #17a2b8;
+        }
+
+        .bottom-download {
+            background: #f8f9fa;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid #e9ecef;
+            display: none;
+        }
+
+        .bottom-download h3 {
+            color: #28a745;
+            margin-bottom: 15px;
+        }
+
+        .bottom-download p {
+            color: #6c757d;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .audio-comparison {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .progress-info {
+                justify-content: center;
+            }
+            
+            .rating-options {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎵 音频质量主观评测</h1>
+            <p>请仔细聆听两个音频样本，并选择您认为质量更好的一个</p>
+        </div>
+        
+        <div class="controls">
+            <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+                <button class="load-btn" onclick="loadAudioData()">🎵 加载音频评测数据</button>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-weight: 500; color: #495057;">评测数量: 25条 (从50条中随机抽取)</span>
+                </div>
+
+            </div>
+            
+            <div class="progress-info">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <span class="progress-text" id="progressText">进度: 0/0</span>
+            </div>
+            
+            <input type="text" class="username-input" id="usernameInput" placeholder="请输入您的姓名">
+            
+            <button class="download-btn" id="downloadBtn" onclick="downloadResults()" disabled>
+                📥 下载评测结果
+            </button>
+        </div>
+        
+        <div class="content">
+            <div id="evaluationContainer">
+                <div class="no-data">
+                    <div class="upload-icon">🎵</div>
+                    <h3>点击加载音频评测数据</h3>
+                    <p>将自动加载StressTransfer和Gemini模型生成的音频进行配对评测</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bottom-download" id="bottomDownloadSection">
+            <h3>🎉 评测完成！</h3>
+            <p>您已完成所有音频样本的评测，请下载结果文件。</p>
+            <button class="download-btn" onclick="downloadResults()">
+                📥 下载完整评测结果
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let evaluationData = [];
+        let results = {};
+        let audioFiles = { gemini: [], stresstransfer: [] };
+
+        // 中文可能答案选项将从数据文件中动态加载
+        let chinese_possible_answers = [];
+
+        // 预设的固定ID列表（50条）
+        let fixedIdsList = [
+            "000001", "000005", "000012", "000018", "000025",
+            "000032", "000041", "000047", "000053", "000062",
+            "000071", "000078", "000085", "000092", "000101",
+            "000108", "000116", "000122", "000131", "000138",
+            "000145", "000154", "000159", "000166", "000173",
+            "000180", "000187", "000194", "000201", "000208",
+            "000015", "000022", "000029", "000036", "000043",
+            "000050", "000057", "000064", "000075", "000082",
+            "000089", "000096", "000103", "000110", "000117",
+            "000124", "000135", "000142", "000149", "000156"
+        ];
+        
+        // 从固定ID列表中随机抽取25条的函数
+        function getRandomIds(idsList, count = 25) {
+            const shuffled = [...idsList].sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, count);
+        }
+
+        async function loadAudioData() {
+            try {
+                showToast('正在加载音频数据...', 'info');
+                
+                // 加载gemini数据
+                const response = await fetch('gemini.jsonl');
+                if (!response.ok) {
+                    throw new Error(`无法加载gemini.jsonl: ${response.status}`);
+                }
+                const text = await response.text();
+                const geminiData = text.trim().split('\n').map(line => JSON.parse(line));
+                
+                console.log('Gemini数据加载成功:', geminiData.length, '条记录');
+                
+                // 从固定ID列表中随机抽取25条
+                const randomSelectedIds = getRandomIds(fixedIdsList, 25);
+                console.log('随机抽取的ID:', randomSelectedIds);
+                
+                // 根据随机抽取的ID筛选数据
+                const selectedItems = geminiData.filter(item => randomSelectedIds.includes(item.id));
+                
+                console.log('固定ID列表匹配的数据:', selectedItems.length, '条');
+                
+                if (selectedItems.length === 0) {
+                    throw new Error('固定ID列表中没有找到有效的音频数据');
+                }
+                
+                // 基于固定ID创建评测数据 - 为每个ID创建4个评测项（4个模型的音频）
+                audioData = [];
+                selectedItems.forEach((item, index) => {
+                    // SeamlessExpressive 音频评测项
+                    audioData.push({
+                        id: `pair_${index}_seamlessexpressive`,
+                        original_id: item.id,
+                        pair_id: `pair_${index}`,
+                        model: 'SeamlessExpressive',
+                        text: item.prediction || '文本未找到',
+                        audio_path: `wavs/seamlessexpressive/${item.id}.wav`,
+                        chinese_possible_answers: item.chinese_possible_answers || []
+                    });
+                    
+                    // GPT4O 音频评测项
+                    audioData.push({
+                        id: `pair_${index}_gpt4o`,
+                        original_id: item.id,
+                        pair_id: `pair_${index}`,
+                        model: 'GPT4O',
+                        text: item.prediction || '文本未找到',
+                        audio_path: `wavs/gpt-4o/${item.id}.wav`,
+                        chinese_possible_answers: item.chinese_possible_answers || []
+                    });
+                    
+                    // Gemini 音频评测项
+                    audioData.push({
+                        id: `pair_${index}_gemini`,
+                        original_id: item.id,
+                        pair_id: `pair_${index}`,
+                        model: 'Gemini',
+                        text: item.prediction || '文本未找到',
+                        audio_path: `wavs/gemini/${item.id}.wav`,
+                        chinese_possible_answers: item.chinese_possible_answers || []
+                    });
+                    
+                    // StressTransfer 音频评测项
+                    audioData.push({
+                        id: `pair_${index}_stresstransfer`,
+                        original_id: item.id,
+                        pair_id: `pair_${index}`,
+                        model: 'StressTransfer',
+                        text: item.prediction || '文本未找到',
+                        audio_path: `wavs/StressTransfer/${item.id}.wav`,
+                        chinese_possible_answers: item.chinese_possible_answers || []
+                    });
+                });
+                
+                // 随机打乱评测项的顺序
+                audioData = audioData.sort(() => Math.random() - 0.5);
+                
+                console.log('加载的音频数据:', audioData.length, '条');
+                
+                results = {};
+                renderEvaluationItems();
+                updateProgress();
+                showToast(`成功加载 ${audioData.length} 条音频评测数据！`, 'success');
+                
+            } catch (error) {
+                showToast('加载音频数据失败: ' + error.message, 'error');
+                console.error('加载音频数据时出错:', error);
+            }
+        }
+
+        async function getAudioFileList(folderPath) {
+            // 由于浏览器安全限制，我们无法直接读取文件夹内容
+            // 这里我们根据已知的文件命名规律生成文件列表
+            const files = [];
+            
+            // 尝试检查000000到000217的文件是否存在
+            for (let i = 0; i <= 217; i++) {
+                const id = i.toString().padStart(6, '0');
+                try {
+                    const response = await fetch(`${folderPath}/${id}.wav`, { method: 'HEAD' });
+                    if (response.ok) {
+                        files.push(id);
+                    }
+                } catch (e) {
+                    // 文件不存在，跳过
+                }
+            }
+            
+            return files;
+        }
+
+        function findCommonAudioIds(geminiFiles, stresstransferFiles) {
+            return geminiFiles.filter(id => stresstransferFiles.includes(id));
+        }
+
+        function renderEvaluationItems() {
+            const container = document.getElementById('evaluationContainer');
+            
+            if (audioData.length === 0) {
+                container.innerHTML = `
+                    <div class="no-data">
+                        <div class="upload-icon">🎵</div>
+                        <h3>点击加载音频评测数据</h3>
+                        <p>将自动加载音频样本进行强调意图评测</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = audioData.map((item, index) => {
+                return `
+                    <div class="evaluation-item">
+                        <div class="item-header">
+                            <div class="item-number">样本 ${index + 1}</div>
+                            <div class="item-id">ID: ${item.original_id}</div>
+                            <div class="model-info">模型: ${item.model}</div>
+                        </div>
+                        
+                        <!-- 预测文本已隐藏 -->
+                        
+                        <div class="audio-section">
+                            <div class="audio-label">音频播放</div>
+                            <audio class="audio-player" controls preload="metadata">
+                                <source src="${item.audio_path}" type="audio/wav">
+                                您的浏览器不支持音频播放。
+                            </audio>
+                            <div class="audio-info">请仔细聆听音频中的强调意图</div>
+                        </div>
+                        
+                        <div class="rating-section">
+                            <div class="rating-title">请选择您认为最符合音频强调意图的答案：</div>
+                            <div class="rating-options">
+                                ${(item.chinese_possible_answers || []).map((answer, answerIndex) => `
+                                    <div class="rating-option">
+                                        <input type="radio" id="item${index}_${answerIndex}" name="item${index}" value="${answerIndex}" onchange="updateRating(${index}, ${answerIndex})">
+                                        <label for="item${index}_${answerIndex}">${answerIndex + 1}. ${answer}</label>
+                                    </div>
+                                `).join('')}
+                                <div class="rating-option">
+                                    <input type="radio" id="item${index}_none" name="item${index}" value="none" onchange="updateRating(${index}, 'none')">
+                                    <label for="item${index}_none">${(item.chinese_possible_answers || []).length + 1}. 以上都不是</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateRating(index, rating) {
+            results[index] = rating;
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const total = evaluationData.length;
+            const completed = Object.keys(results).length;
+            const percentage = total > 0 ? (completed / total) * 100 : 0;
+            
+            document.getElementById('progressText').textContent = `进度: ${completed}/${total}`;
+            document.getElementById('progressFill').style.width = `${percentage}%`;
+            
+            const downloadBtn = document.getElementById('downloadBtn');
+            downloadBtn.disabled = completed === 0;
+            
+            // 显示或隐藏底部下载区域
+            const bottomDownloadSection = document.getElementById('bottomDownloadSection');
+            if (completed === total && total > 0) {
+                bottomDownloadSection.style.display = 'block';
+                // 平滑滚动到底部
+                setTimeout(() => {
+                    bottomDownloadSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
+            } else {
+                bottomDownloadSection.style.display = 'none';
+            }
+        }
+
+        function downloadResults() {
+            if (Object.keys(results).length === 0) {
+                showToast('请先完成至少一个评测', 'error');
+                return;
+            }
+
+            const username = document.getElementById('usernameInput').value.trim();
+            if (!username) {
+                showToast('请先输入用户名', 'error');
+                return;
+            }
+
+            const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+            const resultText = generateResultText();
+            
+            const blob = new Blob([resultText], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `audio_evaluation_results_${username}_${timestamp}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            
+            URL.revokeObjectURL(url);
+            showToast('结果已下载！', 'success');
+        }
+
+        function generateResultText() {
+            const timestamp = new Date().toLocaleString('zh-CN');
+            const username = document.getElementById('usernameInput').value.trim();
+            
+            let text = `音频强调意图主观评测结果\n`;
+            text += `评测人员: ${username}\n`;
+            text += `评测时间: ${timestamp}\n`;
+            text += `总样本数: ${evaluationData.length}\n`;
+            text += `已评测数: ${Object.keys(results).length}\n\n`;
+            
+            // 统计各选项的选择次数
+            const optionStats = {};
+            const modelStats = {
+                'Gemini': {},
+                'StressTransfer': {}
+            };
+            
+            // 收集所有可能的选项
+            const allOptions = new Set();
+            evaluationData.forEach(item => {
+                if (item.chinese_possible_answers) {
+                    item.chinese_possible_answers.forEach((answer, index) => {
+                        allOptions.add(`${index}_${answer}`);
+                    });
+                }
+            });
+            allOptions.add('none_以上都不是');
+            
+            // 初始化统计
+            allOptions.forEach(option => {
+                optionStats[option] = 0;
+                modelStats['Gemini'][option] = 0;
+                modelStats['StressTransfer'][option] = 0;
+            });
+            
+            Object.entries(results).forEach(([index, result]) => {
+                const item = evaluationData[index];
+                let optionKey;
+                if (result === 'none') {
+                    optionKey = 'none_以上都不是';
+                } else {
+                    const answerText = item.chinese_possible_answers ? item.chinese_possible_answers[result] : '';
+                    optionKey = `${result}_${answerText}`;
+                }
+                
+                if (optionStats.hasOwnProperty(optionKey)) {
+                    optionStats[optionKey]++;
+                    modelStats[item.model][optionKey]++;
+                }
+            });
+            
+            text += `=== 整体评测统计 ===\n`;
+            Object.entries(optionStats).forEach(([optionKey, count]) => {
+                if (count > 0) {
+                    const [index, answer] = optionKey.split('_');
+                    if (index === 'none') {
+                        text += `以上都不是: ${count} 次\n`;
+                    } else {
+                        text += `${parseInt(index) + 1}. ${answer}: ${count} 次\n`;
+                    }
+                }
+            });
+            text += `\n`;
+            
+            text += `=== 按模型分组统计 ===\n`;
+            Object.entries(modelStats).forEach(([model, stats]) => {
+                text += `${model} 模型:\n`;
+                Object.entries(stats).forEach(([optionKey, count]) => {
+                    if (count > 0) {
+                        const [index, answer] = optionKey.split('_');
+                        if (index === 'none') {
+                            text += `  以上都不是: ${count} 次\n`;
+                        } else {
+                            text += `  ${parseInt(index) + 1}. ${answer}: ${count} 次\n`;
+                        }
+                    }
+                });
+                text += `\n`;
+            });
+            
+            text += `=== 详细评测结果 ===\n`;
+            Object.entries(results).forEach(([index, result]) => {
+                const item = evaluationData[index];
+                let resultText;
+                if (result === 'none') {
+                    resultText = '以上都不是';
+                } else {
+                    const answerText = item.chinese_possible_answers ? item.chinese_possible_answers[result] : '';
+                    resultText = `${parseInt(result) + 1}. ${answerText}`;
+                }
+                
+                text += `样本 ${parseInt(index) + 1} (ID: ${item.original_id}):\n`;
+                text += `  模型: ${item.model}\n`;
+                text += `  选择: ${resultText}\n\n`;
+            });
+            
+            return text;
+        }
+
+
+
+        function showToast(message, type = 'info') {
+            // 移除现有的toast
+            const existingToast = document.querySelector('.toast');
+            if (existingToast) {
+                existingToast.remove();
+            }
+            
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            
+            document.body.appendChild(toast);
+            
+            // 触发显示动画
+            setTimeout(() => toast.classList.add('show'), 100);
+            
+            // 3秒后自动隐藏
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // 页面加载完成后的初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            updateProgress();
+        });
+    </script>
+</body>
+</html>
