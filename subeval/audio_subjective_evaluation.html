@@ -316,6 +316,25 @@
             margin-bottom: 20px;
         }
 
+        .fixed-bottom-download {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            border-radius: 50px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .fixed-bottom-download .download-btn {
+            margin: 0;
+            font-size: 14px;
+            padding: 12px 20px;
+        }
+
         @media (max-width: 768px) {
             .audio-comparison {
                 grid-template-columns: 1fr;
@@ -334,6 +353,17 @@
             .rating-options {
                 flex-direction: column;
                 align-items: center;
+            }
+            
+            .fixed-bottom-download {
+                bottom: 10px;
+                right: 10px;
+                padding: 10px;
+            }
+            
+            .fixed-bottom-download .download-btn {
+                font-size: 12px;
+                padding: 10px 16px;
             }
         }
     </style>
@@ -386,9 +416,17 @@
             </button>
         </div>
     </div>
+    
+    <!-- 页面底部固定下载按钮 -->
+    <div class="fixed-bottom-download">
+        <button class="download-btn" onclick="downloadResults()" id="fixedDownloadBtn" disabled>
+            📥 下载评测结果
+        </button>
+    </div>
 
     <script>
         let evaluationData = [];
+        let audioData = [];
         let results = {};
         let audioFiles = { gemini: [], stresstransfer: [] };
 
@@ -414,27 +452,42 @@
             const shuffled = [...idsList].sort(() => 0.5 - Math.random());
             return shuffled.slice(0, count);
         }
+        
+        // 将真实模型名称映射为匿名标识符
+        function getAnonymousModelName(modelName) {
+            const modelMapping = {
+                'SeamlessExpressive': 'Model A',
+                'GPT4O': 'Model B', 
+                'Gemini': 'Model C',
+                'StressTransfer': 'Model D'
+            };
+            return modelMapping[modelName] || modelName;
+        }
 
         async function loadAudioData() {
             try {
                 showToast('正在加载音频数据...', 'info');
                 
-                // 加载gemini数据
-                const response = await fetch('gemini.jsonl');
-                if (!response.ok) {
-                    throw new Error(`无法加载gemini.jsonl: ${response.status}`);
+                // 加载stresstest数据
+                const stresstestResponse = await fetch('stresstest_dataset_expanded.jsonl');
+                if (!stresstestResponse.ok) {
+                    throw new Error(`无法加载stresstest_dataset_expanded.jsonl: ${stresstestResponse.status}`);
                 }
-                const text = await response.text();
-                const geminiData = text.trim().split('\n').map(line => JSON.parse(line));
+                const stresstestText = await stresstestResponse.text();
+                const stresstestData = stresstestText.trim().split('\n').map(line => JSON.parse(line));
                 
-                console.log('Gemini数据加载成功:', geminiData.length, '条记录');
+                console.log('Stresstest数据加载成功:', stresstestData.length, '条记录');
                 
                 // 从固定ID列表中随机抽取25条
                 const randomSelectedIds = getRandomIds(fixedIdsList, 25);
                 console.log('随机抽取的ID:', randomSelectedIds);
                 
                 // 根据随机抽取的ID筛选数据
-                const selectedItems = geminiData.filter(item => randomSelectedIds.includes(item.id));
+                // 将数字ID转换为6位字符串格式进行匹配
+                const selectedItems = stresstestData.filter(item => {
+                    const formattedId = item.id.toString().padStart(6, '0');
+                    return randomSelectedIds.includes(formattedId);
+                });
                 
                 console.log('固定ID列表匹配的数据:', selectedItems.length, '条');
                 
@@ -445,47 +498,50 @@
                 // 基于固定ID创建评测数据 - 为每个ID创建4个评测项（4个模型的音频）
                 audioData = [];
                 selectedItems.forEach((item, index) => {
+                    // 格式化ID为6位数字
+                    const formattedId = item.id.toString().padStart(6, '0');
+                    
                     // SeamlessExpressive 音频评测项
                     audioData.push({
-                        id: `pair_${index}_seamlessexpressive`,
+                        id: `${formattedId}_seamlessexpressive`,
                         original_id: item.id,
-                        pair_id: `pair_${index}`,
+                        formatted_id: formattedId,
                         model: 'SeamlessExpressive',
-                        text: item.prediction || '文本未找到',
-                        audio_path: `wavs/seamlessexpressive/${item.id}.wav`,
+                        text: item.transcription || '文本未找到',
+                        audio_path: `wavs/seamlessexpressive/${formattedId}.wav`,
                         chinese_possible_answers: item.chinese_possible_answers || []
                     });
                     
                     // GPT4O 音频评测项
                     audioData.push({
-                        id: `pair_${index}_gpt4o`,
+                        id: `${formattedId}_gpt4o`,
                         original_id: item.id,
-                        pair_id: `pair_${index}`,
+                        formatted_id: formattedId,
                         model: 'GPT4O',
-                        text: item.prediction || '文本未找到',
-                        audio_path: `wavs/gpt-4o/${item.id}.wav`,
+                        text: item.transcription || '文本未找到',
+                        audio_path: `wavs/gpt-4o/${formattedId}.wav`,
                         chinese_possible_answers: item.chinese_possible_answers || []
                     });
                     
                     // Gemini 音频评测项
                     audioData.push({
-                        id: `pair_${index}_gemini`,
+                        id: `${formattedId}_gemini`,
                         original_id: item.id,
-                        pair_id: `pair_${index}`,
+                        formatted_id: formattedId,
                         model: 'Gemini',
-                        text: item.prediction || '文本未找到',
-                        audio_path: `wavs/gemini/${item.id}.wav`,
+                        text: item.transcription || '文本未找到',
+                        audio_path: `wavs/gemini/${formattedId}.wav`,
                         chinese_possible_answers: item.chinese_possible_answers || []
                     });
                     
                     // StressTransfer 音频评测项
                     audioData.push({
-                        id: `pair_${index}_stresstransfer`,
+                        id: `${formattedId}_stresstransfer`,
                         original_id: item.id,
-                        pair_id: `pair_${index}`,
+                        formatted_id: formattedId,
                         model: 'StressTransfer',
-                        text: item.prediction || '文本未找到',
-                        audio_path: `wavs/StressTransfer/${item.id}.wav`,
+                        text: item.transcription || '文本未找到',
+                        audio_path: `wavs/StressTransfer/${formattedId}.wav`,
                         chinese_possible_answers: item.chinese_possible_answers || []
                     });
                 });
@@ -550,8 +606,8 @@
                     <div class="evaluation-item">
                         <div class="item-header">
                             <div class="item-number">样本 ${index + 1}</div>
-                            <div class="item-id">ID: ${item.original_id}</div>
-                            <div class="model-info">模型: ${item.model}</div>
+                            <div class="item-id">ID: ${item.formatted_id}</div>
+                            <div class="model-info">模型: ${getAnonymousModelName(item.model)}</div>
                         </div>
                         
                         <!-- 预测文本已隐藏 -->
@@ -591,7 +647,7 @@
         }
 
         function updateProgress() {
-            const total = evaluationData.length;
+            const total = audioData ? audioData.length : 0;
             const completed = Object.keys(results).length;
             const percentage = total > 0 ? (completed / total) * 100 : 0;
             
@@ -599,7 +655,9 @@
             document.getElementById('progressFill').style.width = `${percentage}%`;
             
             const downloadBtn = document.getElementById('downloadBtn');
+            const fixedDownloadBtn = document.getElementById('fixedDownloadBtn');
             downloadBtn.disabled = completed === 0;
+            fixedDownloadBtn.disabled = completed === 0;
             
             // 显示或隐藏底部下载区域
             const bottomDownloadSection = document.getElementById('bottomDownloadSection');
@@ -615,32 +673,59 @@
         }
 
         function downloadResults() {
+            console.log('downloadResults函数被调用');
+            console.log('当前results:', results);
+            console.log('results长度:', Object.keys(results).length);
+            
             if (Object.keys(results).length === 0) {
+                console.log('没有评测结果，显示错误提示');
                 showToast('请先完成至少一个评测', 'error');
                 return;
             }
 
-            const username = document.getElementById('usernameInput').value.trim();
+            const usernameElement = document.getElementById('usernameInput');
+            console.log('用户名输入框元素:', usernameElement);
+            const username = usernameElement ? usernameElement.value.trim() : '';
+            console.log('用户名:', username);
+            
             if (!username) {
+                console.log('用户名为空，显示错误提示');
                 showToast('请先输入用户名', 'error');
                 return;
             }
 
+            console.log('开始生成下载文件');
             const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+            console.log('时间戳:', timestamp);
+            
             const resultText = generateResultText();
+            console.log('生成的结果文本长度:', resultText.length);
             
             const blob = new Blob([resultText], { type: 'text/plain;charset=utf-8' });
+            console.log('创建blob:', blob);
+            
             const url = URL.createObjectURL(blob);
+            console.log('创建URL:', url);
             
             const a = document.createElement('a');
             a.href = url;
             a.download = `audio_evaluation_results_${username}_${timestamp}.txt`;
+            console.log('下载文件名:', a.download);
+            
             document.body.appendChild(a);
+            console.log('添加链接到页面');
+            
             a.click();
+            console.log('触发点击下载');
+            
             document.body.removeChild(a);
+            console.log('移除链接元素');
             
             URL.revokeObjectURL(url);
+            console.log('释放URL对象');
+            
             showToast('结果已下载！', 'success');
+            console.log('显示成功提示');
         }
 
         function generateResultText() {
@@ -650,36 +735,42 @@
             let text = `音频强调意图主观评测结果\n`;
             text += `评测人员: ${username}\n`;
             text += `评测时间: ${timestamp}\n`;
-            text += `总样本数: ${evaluationData.length}\n`;
+            text += `总样本数: ${audioData ? audioData.length : 0}\n`;
             text += `已评测数: ${Object.keys(results).length}\n\n`;
             
             // 统计各选项的选择次数
             const optionStats = {};
             const modelStats = {
+                'SeamlessExpressive': {},
+                'GPT4O': {},
                 'Gemini': {},
                 'StressTransfer': {}
             };
             
             // 收集所有可能的选项
             const allOptions = new Set();
-            evaluationData.forEach(item => {
-                if (item.chinese_possible_answers) {
-                    item.chinese_possible_answers.forEach((answer, index) => {
-                        allOptions.add(`${index}_${answer}`);
-                    });
-                }
-            });
-            allOptions.add('none_以上都不是');
+            if (audioData) {
+                audioData.forEach(item => {
+                     if (item.chinese_possible_answers) {
+                         item.chinese_possible_answers.forEach((answer, index) => {
+                             allOptions.add(`${index}_${answer}`);
+                         });
+                     }
+                 });
+             }
+             allOptions.add('none_以上都不是');
             
             // 初始化统计
             allOptions.forEach(option => {
                 optionStats[option] = 0;
+                modelStats['SeamlessExpressive'][option] = 0;
+                modelStats['GPT4O'][option] = 0;
                 modelStats['Gemini'][option] = 0;
                 modelStats['StressTransfer'][option] = 0;
             });
             
             Object.entries(results).forEach(([index, result]) => {
-                const item = evaluationData[index];
+                const item = audioData[index];
                 let optionKey;
                 if (result === 'none') {
                     optionKey = 'none_以上都不是';
@@ -690,7 +781,9 @@
                 
                 if (optionStats.hasOwnProperty(optionKey)) {
                     optionStats[optionKey]++;
-                    modelStats[item.model][optionKey]++;
+                    if (modelStats[item.model]) {
+                        modelStats[item.model][optionKey]++;
+                    }
                 }
             });
             
@@ -709,7 +802,8 @@
             
             text += `=== 按模型分组统计 ===\n`;
             Object.entries(modelStats).forEach(([model, stats]) => {
-                text += `${model} 模型:\n`;
+                const displayModelName = getAnonymousModelName(model);
+                text += `${displayModelName} 模型:\n`;
                 Object.entries(stats).forEach(([optionKey, count]) => {
                     if (count > 0) {
                         const [index, answer] = optionKey.split('_');
@@ -725,7 +819,7 @@
             
             text += `=== 详细评测结果 ===\n`;
             Object.entries(results).forEach(([index, result]) => {
-                const item = evaluationData[index];
+                const item = audioData[index];
                 let resultText;
                 if (result === 'none') {
                     resultText = '以上都不是';
@@ -734,7 +828,7 @@
                     resultText = `${parseInt(result) + 1}. ${answerText}`;
                 }
                 
-                text += `样本 ${parseInt(index) + 1} (ID: ${item.original_id}):\n`;
+                text += `样本 ${parseInt(index) + 1} (ID: ${item.formatted_id}):\n`;
                 text += `  模型: ${item.model}\n`;
                 text += `  选择: ${resultText}\n\n`;
             });
