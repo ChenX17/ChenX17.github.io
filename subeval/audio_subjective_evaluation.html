@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>音频质量主观评测</title>
+    <title>句子重音推理评测</title>
     <style>
         * {
             margin: 0;
@@ -371,8 +371,8 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🎵 音频质量主观评测</h1>
-            <p>请仔细聆听两个音频样本，并选择您认为质量更好的一个</p>
+            <h1>🎵 句子重音推理评测</h1>
+            <p>根据输入的音频，推测强调的意图</p>
         </div>
         
         <div class="controls">
@@ -403,7 +403,7 @@
                 <div class="no-data">
                     <div class="upload-icon">🎵</div>
                     <h3>点击加载音频评测数据</h3>
-                    <p>将自动加载StressTransfer和Gemini模型生成的音频进行配对评测</p>
+                    <p>将自动加载音频样本进行句子重音推理评测</p>
                 </div>
             </div>
         </div>
@@ -595,7 +595,7 @@
                     <div class="no-data">
                         <div class="upload-icon">🎵</div>
                         <h3>点击加载音频评测数据</h3>
-                        <p>将自动加载音频样本进行强调意图评测</p>
+                        <p>将自动加载音频样本进行句子重音推理评测</p>
                     </div>
                 `;
                 return;
