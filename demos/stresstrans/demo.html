@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Model Comparison</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .table-container {
+            padding: 30px;
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        th {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 20px 15px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.1em;
+            border: none;
+        }
+        
+        td {
+            padding: 20px 15px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tr:hover {
+            background-color: #e3f2fd;
+            transition: background-color 0.3s ease;
+        }
+        
+        .audio-id {
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #333;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        
+        .model-name {
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        audio {
+            width: 100%;
+            max-width: 200px;
+            height: 40px;
+            border-radius: 20px;
+            outline: none;
+        }
+        
+        audio::-webkit-media-controls-panel {
+            background-color: #f1f3f4;
+            border-radius: 20px;
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            font-style: italic;
+            font-size: 0.9em;
+            padding: 10px;
+            background-color: #ffeaea;
+            border-radius: 5px;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .audio-cell {
+            min-width: 220px;
+        }
+        
+        .id-cell {
+            min-width: 120px;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            font-weight: bold;
+        }
+        
+        .transcription-text {
+            margin-top: 10px;
+            padding: 12px 16px;
+            background: linear-gradient(135deg, #e8f5e8 0%, #f0f8ff 100%);
+            border-radius: 12px;
+            font-size: 0.9em;
+            color: #2c3e50;
+            text-align: left;
+            border: 2px solid #a8d8ea;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            word-wrap: break-word;
+            max-width: 220px;
+            position: relative;
+            font-family: 'Microsoft YaHei', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+            line-height: 1.4;
+            transition: all 0.3s ease;
+        }
+        
+        .transcription-text:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            border-color: #79a8d1;
+        }
+        
+
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 5px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .table-container {
+                padding: 15px;
+            }
+            
+            th, td {
+                padding: 15px 10px;
+            }
+            
+            audio {
+                max-width: 150px;
+            }
+            
+            .transcription-text {
+                max-width: 180px;
+                padding: 10px 12px;
+                font-size: 0.85em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Model Comparison</h1>
+            <p>Comparing performance of different models on Emphasis Preserving S2ST. The demo includes "Intonation Stress Annotation, Source Speech, SpeamlessM4T, SeamlessExpressive, GPT4o, Gemini, and StressTransfer(ours)".</p>
+        </div>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Audio ID</th>
+                        <th>Intonation<br><small>Stress Annotation</small></th>
+                        <th>Source Speech<br><small>stresstest_orig</small></th>
+                        <th>SeamlessM4T<br><small>seamlessm4t</small></th>
+                        <th>SeamlessExpressive<br><small>seamlessexpressive</small></th>
+                        <th>GPT-4o<br><small>gpt-4o</small></th>
+                        <th>Gemini<br><small>gemini</small></th>
+                        <th>StressTransfer<br><small>StressTransfer</small></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="id-cell">
+                            <div class="audio-id">000001</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">Intonation</div>
+                            <div style="padding: 10px; background-color: #f8f9fa; border-radius: 5px; font-style: italic; color: #333; text-align: left; max-width: 200px; word-wrap: break-word;">I didn't say he *stole* the money.</div>
+                        </td>
+                        
+                        <td class="audio-cell">
+                            <div class="model-name">Source</div>
+                            <audio controls>
+                                <source src="wavs_all/stresstest_orig/000001.wav" type="audio/wav">
+                                <div class="error-message">Your browser does not support audio playback</div>
+                            </audio>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">SeamlessM4T</div>
+                            <audio controls>
+                                <source src="wavs_all/seamlessm4t/000001.wav" type="audio/wav">
+                                <div class="error-message">Audio file not found</div>
+                            </audio>
+                            <div class="transcription-text">我没有说他偷了钱。</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">SeamlessExpressive</div>
+                            <audio controls>
+                                <source src="wavs_all/seamlessexpressive/000001.wav" type="audio/wav">
+                                <div class="error-message">Audio file not found</div>
+                            </audio>
+                            <div class="transcription-text">我不是说他偷了钱了。</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">GPT-4o</div>
+                            <audio controls>
+                                <source src="wavs_all/gpt-4o/000001.wav" type="audio/wav">
+                                <div class="error-message">Audio file not found</div>
+                            </audio>
+                            <div class="transcription-text">我没有说他*偷了*这笔钱。</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">Gemini</div>
+                            <audio controls>
+                                <source src="wavs_all/gemini/000001.wav" type="audio/wav">
+                                <div class="error-message">Audio file not found</div>
+                            </audio>
+                            <div class="transcription-text">我没说他*偷了钱*。</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">StressTransfer</div>
+                            <audio controls>
+                                <source src="wavs_all/StressTransfer/000001.wav" type="audio/wav">
+                                <div class="error-message">Audio file not found</div>
+                            </audio>
+                            <div class="transcription-text">我没说他*偷了钱*。</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="id-cell">
+                            <div class="audio-id">000025</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">Intonation</div>
+                            <div style="padding: 10px; background-color: #f8f9fa; border-radius: 5px; font-style: italic; color: #333; text-align: left; max-width: 200px; word-wrap: break-word;">She bought a car for *her brother*.</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">Source</div>
+                            <audio controls>
+                                <source src="wavs_all/stresstest_orig/000025.wav" type="audio/wav">
+                                <div class="error-message">Your browser does not support audio playback</div>
+                            </audio>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">SeamlessM4T</div>
+                            <audio controls>
+                                <source src="wavs_all/seamlessm4t/000025.wav" type="audio/wav">
+                                <div class="error-message">Audio file not found</div>
+                            </audio>
+                            <div class="transcription-text">他为他的哥哥买了一辆车子。</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">SeamlessExpressive</div>
+                            <audio controls>
+                                <source src="wavs_all/seamlessexpressive/000025.wav" type="audio/wav">
+                                <div class="error-message">Audio file not found</div>
+                            </audio>
+                            <div class="transcription-text">他为他的哥哥买了一辆车。</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">GPT-4o</div>
+                            <audio controls>
+                                <source src="wavs_all/gpt-4o/000025.wav" type="audio/wav">
+                                <div class="error-message">Audio file not found</div>
+                            </audio>
+                            <div class="transcription-text">他为他的*弟弟*买了一辆车。</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">Gemini</div>
+                            <audio controls>
+                                <source src="wavs_all/gemini/000025.wav" type="audio/wav">
+                                <div class="error-message">Audio file not found</div>
+                            </audio>
+                            <div class="transcription-text">他买了一辆车给他的*哥哥*。</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">StressTransfer</div>
+                            <audio controls>
+                                <source src="wavs_all/StressTransfer/000025.wav" type="audio/wav">
+                                <div class="error-message">Audio file not found</div>
+                            </audio>
+                            <div class="transcription-text">他为他的*兄弟*买了一辆车。</div>
+                        </td>
+                        
+                    </tr>
+                    <tr>
+                        <td class="id-cell">
+                            <div class="audio-id">000029</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">Intonation</div>
+                            <div style="padding: 10px; background-color: #f8f9fa; border-radius: 5px; font-style: italic; color: #333; text-align: left; max-width: 200px; word-wrap: break-word;">I didn't tell *her* you were late.</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">Source</div>
+                            <audio controls>
+                                <source src="wavs_all/stresstest_orig/000029.wav" type="audio/wav">
+                                <div class="error-message">Your browser does not support audio playback</div>
+                            </audio>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">SeamlessM4T</div>
+                            <audio controls>
+                                <source src="wavs_all/seamlessm4t/000029.wav" type="audio/wav">
+                                <div class="error-message">Audio file not found</div>
+                            </audio>
+                            <div class="transcription-text">我没有告诉他你迟到了。</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">SeamlessExpressive</div>
+                            <audio controls>
+                                <source src="wavs_all/seamlessexpressive/000029.wav" type="audio/wav">
+                                <div class="error-message">Audio file not found</div>
+                            </audio>
+                            <div class="transcription-text">我没有告诉他你迟到了。</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">GPT-4o</div>
+                            <audio controls>
+                                <source src="wavs_all/gpt-4o/000029.wav" type="audio/wav">
+                                <div class="error-message">Audio file not found</div>
+                            </audio>
+                            <div class="transcription-text">我没*告诉*他你迟到了。</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">Gemini</div>
+                            <audio controls>
+                                <source src="wavs_all/gemini/000029.wav" type="audio/wav">
+                                <div class="error-message">Audio file not found</div>
+                            </audio>
+                            <div class="transcription-text">我没*告诉*他你迟到了。</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">StressTransfer</div>
+                            <audio controls>
+                                <source src="wavs_all/StressTransfer/000029.wav" type="audio/wav">
+                                <div class="error-message">Audio file not found</div>
+                            </audio>
+                            <div class="transcription-text">我没有告诉*他*你迟到了。</div>
+                        </td>
+                        
+                    </tr>
+
+                    <tr>
+                        <td class="id-cell">
+                            <div class="audio-id">000005</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">Intonation</div>
+                            <div style="padding: 10px; background-color: #f8f9fa; border-radius: 5px; font-style: italic; color: #333; text-align: left; max-width: 200px; word-wrap: break-word;">*I did not* steal this car.</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">Source</div>
+                            <audio controls>
+                                <source src="wavs_all/stresstest_orig/000005.wav" type="audio/wav">
+                                <div class="error-message">Your browser does not support audio playback</div>
+                            </audio>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">SeamlessM4T</div>
+                            <audio controls>
+                                <source src="wavs_all/seamlessm4t/000005.wav" type="audio/wav">
+                                <div class="error-message">Audio file not found</div>
+                            </audio>
+                            <div class="transcription-text">我没有偷这辆车。</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">SeamlessExpressive</div>
+                            <audio controls>
+                                <source src="wavs_all/seamlessexpressive/000005.wav" type="audio/wav">
+                                <div class="error-message">Audio file not found</div>
+                            </audio>
+                            <div class="transcription-text">我没有偷着两车里。</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">GPT-4o</div>
+                            <audio controls>
+                                <source src="wavs_all/gpt-4o/000005.wav" type="audio/wav">
+                                <div class="error-message">Audio file not found</div>
+                            </audio>
+                            <div class="transcription-text">我*没有*偷这辆车。</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">Gemini</div>
+                            <audio controls>
+                                <source src="wavs_all/gemini/000005.wav" type="audio/wav">
+                                <div class="error-message">Audio file not found</div>
+                            </audio>
+                            <div class="transcription-text">我*没有*偷这辆车。</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">StressTransfer</div>
+                            <audio controls>
+                                <source src="wavs_all/StressTransfer/000005.wav" type="audio/wav">
+                                <div class="error-message">Audio file not found</div>
+                            </audio>
+                            <div class="transcription-text">我*没有*偷这辆车。</div>
+                        </td>
+                        
+                    </tr>
+                    <tr>
+                        <td class="id-cell">
+                            <div class="audio-id">000012</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">Intonation</div>
+                            <div style="padding: 10px; background-color: #f8f9fa; border-radius: 5px; font-style: italic; color: #333; text-align: left; max-width: 200px; word-wrap: break-word;">I *just* took this book.</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">Source</div>
+                            <audio controls>
+                                <source src="wavs_all/stresstest_orig/000012.wav" type="audio/wav">
+                                <div class="error-message">Your browser does not support audio playback</div>
+                            </audio>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">SeamlessM4T</div>
+                            <audio controls>
+                                <source src="wavs_all/seamlessm4t/000012.wav" type="audio/wav">
+                                <div class="error-message">Audio file not found</div>
+                            </audio>
+                            <div class="transcription-text">我刚刚拿了这本书。</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">SeamlessExpressive</div>
+                            <audio controls>
+                                <source src="wavs_all/seamlessexpressive/000012.wav" type="audio/wav">
+                                <div class="error-message">Audio file not found</div>
+                            </audio>
+                            <div class="transcription-text">我当时拿走了这本书定。</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">GPT-4o</div>
+                            <audio controls>
+                                <source src="wavs_all/gpt-4o/000012.wav" type="audio/wav">
+                                <div class="error-message">Audio file not found</div>
+                            </audio>
+                            <div class="transcription-text">我刚刚拿了这本*书*。</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">Gemini</div>
+                            <audio controls>
+                                <source src="wavs_all/gemini/000012.wav" type="audio/wav">
+                                <div class="error-message">Audio file not found</div>
+                            </audio>
+                            <div class="transcription-text">我只是*拿了*这本书。</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">StressTransfer</div>
+                            <audio controls>
+                                <source src="wavs_all/StressTransfer/000012.wav" type="audio/wav">
+                                <div class="error-message">Audio file not found</div>
+                            </audio>
+                            <div class="transcription-text">我*刚看了*这本书。</div>
+                        </td>
+                        
+                    </tr>
+                    <tr>
+                        <td class="id-cell">
+                            <div class="audio-id">000015</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">Intonation</div>
+                            <div style="padding: 10px; background-color: #f8f9fa; border-radius: 5px; font-style: italic; color: #333; text-align: left; max-width: 200px; word-wrap: break-word;">You chose to do *this*?</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">Source</div>
+                            <audio controls>
+                                <source src="wavs_all/stresstest_orig/000015.wav" type="audio/wav">
+                                <div class="error-message">Your browser does not support audio playback</div>
+                            </audio>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">SeamlessM4T</div>
+                            <audio controls>
+                                <source src="wavs_all/seamlessm4t/000015.wav" type="audio/wav">
+                                <div class="error-message">Audio file not found</div>
+                            </audio>
+                            <div class="transcription-text">你选择做这个吗?</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">SeamlessExpressive</div>
+                            <audio controls>
+                                <source src="wavs_all/seamlessexpressive/000015.wav" type="audio/wav">
+                                <div class="error-message">Audio file not found</div>
+                            </audio>
+                            <div class="transcription-text">你选择做这件事吗?</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">GPT-4o</div>
+                            <audio controls>
+                                <source src="wavs_all/gpt-4o/000015.wav" type="audio/wav">
+                                <div class="error-message">Audio file not found</div>
+                            </audio>
+                            <div class="transcription-text">你选择*做*这件事。</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">Gemini</div>
+                            <audio controls>
+                                <source src="wavs_all/gemini/000015.wav" type="audio/wav">
+                                <div class="error-message">Audio file not found</div>
+                            </audio>
+                            <div class="transcription-text">你选择做*这个*？</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">StressTransfer</div>
+                            <audio controls>
+                                <source src="wavs_all/StressTransfer/000015.wav" type="audio/wav">
+                                <div class="error-message">Audio file not found</div>
+                            </audio>
+                            <div class="transcription-text">你选择做*这个*？</div>
+                        </td>
+                        
+                    </tr>
+                    <tr>
+                        <td class="id-cell">
+                            <div class="audio-id">000022</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">Intonation</div>
+                            <div style="padding: 10px; background-color: #f8f9fa; border-radius: 5px; font-style: italic; color: #333; text-align: left; max-width: 200px; word-wrap: break-word;">Shocking that *the kids* are going to France this summer.</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">Source</div>
+                            <audio controls>
+                                <source src="wavs_all/stresstest_orig/000022.wav" type="audio/wav">
+                                <div class="error-message">Your browser does not support audio playback</div>
+                            </audio>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">SeamlessM4T</div>
+                            <audio controls>
+                                <source src="wavs_all/seamlessm4t/000022.wav" type="audio/wav">
+                                <div class="error-message">Audio file not found</div>
+                            </audio>
+                            <div class="transcription-text">让人震惊的是孩子们今年夏天要去法国。</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">SeamlessExpressive</div>
+                            <audio controls>
+                                <source src="wavs_all/seamlessexpressive/000022.wav" type="audio/wav">
+                                <div class="error-message">Audio file not found</div>
+                            </audio>
+                            <div class="transcription-text">让人震惊的是,孩子们今年夏天要驱法国度。</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">GPT-4o</div>
+                            <audio controls>
+                                <source src="wavs_all/gpt-4o/000022.wav" type="audio/wav">
+                                <div class="error-message">Audio file not found</div>
+                            </audio>
+                            <div class="transcription-text">令人震惊的是*孩子们*今年夏天要去*法国*。</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">Gemini</div>
+                            <audio controls>
+                                <source src="wavs_all/gemini/000022.wav" type="audio/wav">
+                                <div class="error-message">Audio file not found</div>
+                            </audio>
+                            <div class="transcription-text">孩子们几年夏天要去*法国*,真令人震惊。</div>
+                        </td>
+                        <td class="audio-cell">
+                            <div class="model-name">StressTransfer</div>
+                            <audio controls>
+                                <source src="wavs_all/StressTransfer/000022.wav" type="audio/wav">
+                                <div class="error-message">Audio file not found</div>
+                            </audio>
+                            <div class="transcription-text">令人震惊的是,*孩子们*今年夏天要去*法国*。</div>
+                        </td>
+                        
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script>
+        // 检查音频文件是否存在并处理错误
+        document.addEventListener('DOMContentLoaded', function() {
+            const audioElements = document.querySelectorAll('audio');
+            
+            audioElements.forEach(function(audio) {
+                audio.addEventListener('error', function() {
+                    const errorDiv = this.nextElementSibling;
+                    if (errorDiv && errorDiv.classList.contains('error-message')) {
+                        errorDiv.style.display = 'block';
+                        this.style.display = 'none';
+                    }
+                });
+                
+                audio.addEventListener('loadeddata', function() {
+                    const errorDiv = this.nextElementSibling;
+                    if (errorDiv && errorDiv.classList.contains('error-message')) {
+                        errorDiv.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
