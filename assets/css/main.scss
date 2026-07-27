@@ -107,3 +107,53 @@ h1:before, .anchor:before {
     background-color: #00369f;
     font-size: .8em;
 }
+
+.scholar-citation {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    margin: .15rem 0 1rem;
+    padding: .42rem .62rem;
+    border: 1px solid #d9e2ef;
+    border-radius: .45rem;
+    color: #243b53;
+    background: #f7f9fc;
+    font-size: .86em;
+    line-height: 1;
+    text-decoration: none !important;
+    transition: border-color .15s ease, background-color .15s ease, transform .15s ease;
+
+    &:hover,
+    &:focus {
+        border-color: #8ca8c5;
+        color: #102a43;
+        background: #eef4fa;
+        text-decoration: none !important;
+        transform: translateY(-1px);
+    }
+
+    &:focus-visible {
+        outline: 2px solid #2f6f9f;
+        outline-offset: 2px;
+    }
+}
+
+.scholar-citation__icon {
+    color: #4285f4;
+}
+
+.scholar-citation__label {
+    font-weight: 600;
+}
+
+.scholar-citation__count {
+    padding-left: .45rem;
+    border-left: 1px solid #cbd5e1;
+    color: #52616f;
+    font-variant-numeric: tabular-nums;
+}
+
+.scholar-citation__arrow {
+    color: #7b8794;
+    font-size: .92em;
+}

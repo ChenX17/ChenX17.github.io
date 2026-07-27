@@ -8,21 +8,19 @@ redirect_from:
   - /about.html
 ---
 
-{% if site.google_scholar_stats_use_cdn %}
-{% assign gsDataBaseUrl = "https://cdn.jsdelivr.net/gh/" | append: site.repository | append: "@" %}
-{% else %}
-{% assign gsDataBaseUrl = "https://raw.githubusercontent.com/" | append: site.repository | append: "/" %}
-{% endif %}
-{% assign url = gsDataBaseUrl | append: "google-scholar-stats/gs_data_shieldsio.json" %}
-
 <span class='anchor' id='about-me'></span>
 
-I am currently start my third year of PhD in School of Data Science, The Chinese University of Hong Kong (Shenzhen).
-My chief supervisor is <a href="https://sds.cuhk.edu.cn/en/teacher/1185">Prof. Satoshi Nakamura</a> and co-supervisor is <a href="https://www.colips.org/~eleliha/">Prof. Haizhou Li</a>. 
-I completed my bachelor’s degree at the School <a href="http://www.ee.buaa.edu.cn/">Electronic and Information Engineering</a>, <a href="https://www.buaa.edu.cn/">Beihang University</a>,
-And then I completed my master’s degree in <a href="https://www.sic.tsinghua.edu.cn/index.htm">Integrated Circuit Engineering</a> from <a href="https://www.tsinghua.edu.cn/">Tsinghua University</a>, supervised by <a href="https://scholar.google.com/citations?user=9_QZc-oAAAAJ&hl=en" target="_blank">Prof. Shouyi Yin</a>, in 2020. From 2020 to 2022, I worked as a speech algorithm engineer at Lenovo and Meituan.
+I am a Ph.D. candidate in the School of Data Science at The Chinese University of Hong Kong, Shenzhen. My chief supervisor is <a href="https://sds.cuhk.edu.cn/en/teacher/1185">Prof. Satoshi Nakamura</a>, and my co-supervisor is <a href="https://www.colips.org/~eleliha/">Prof. Haizhou Li</a>.
+I received my bachelor’s degree in <a href="http://www.ee.buaa.edu.cn/">Electronic and Information Engineering</a> from <a href="https://www.buaa.edu.cn/">Beihang University</a>, and my master’s degree in <a href="https://www.sic.tsinghua.edu.cn/index.htm">Integrated Circuit Engineering</a> from <a href="https://www.tsinghua.edu.cn/">Tsinghua University</a>, supervised by <a href="https://scholar.google.com/citations?user=9_QZc-oAAAAJ&hl=en" target="_blank" rel="noopener noreferrer">Prof. Shouyi Yin</a>. From 2020 to 2022, I worked as a speech algorithm engineer at Lenovo and Meituan.
 
-My research interest includes speech-to-speech translation, speech-to-text translation, and speech generation. <a href='https://scholar.google.com/citations?user=JMDsgOMAAAAJ'><img src="https://img.shields.io/endpoint?url={{ url | url_encode }}&logo=Google%20Scholar&labelColor=f6f6f6&color=9cf&style=flat&label=citations"></a>.
+My research interests include speech-to-speech translation, speech-to-text translation, machine translation, and speech generation.
+
+<a class="scholar-citation" href="https://scholar.google.com/citations?user=JMDsgOMAAAAJ" target="_blank" rel="noopener noreferrer" aria-label="View Xi Chen's citations on Google Scholar">
+  <span class="scholar-citation__icon" aria-hidden="true"><i class="fas fa-graduation-cap"></i></span>
+  <span class="scholar-citation__label">Google Scholar</span>
+  <span class="scholar-citation__count" id="total_cit" aria-live="polite">View citations</span>
+  <span class="scholar-citation__arrow" aria-hidden="true">↗</span>
+</a>
 
 
 # 🔥 News
@@ -31,11 +29,26 @@ My research interest includes speech-to-speech translation, speech-to-text trans
 - *2023.12*: &nbsp;🎉🎉 Our accent conversion paper is accepted by ICASSP 2024.
 
 # 📖 Educations
-- *2022.09 - 2024.10 (now)*, Ph.D candidate at School of Data Science, The Chinese University of Hong Kong (Shenzhen), Shenzhen.
+- *2022.09 - Present*, Ph.D. candidate at the School of Data Science, The Chinese University of Hong Kong, Shenzhen.
 - *2017.09 - 2020.06*, M.E. in <a href="https://www.sic.tsinghua.edu.cn/index.htm">Integrated Circuit Engineering</a>, <a href="https://www.tsinghua.edu.cn/">Tsinghua University</a>, Beijing.
 - *2013.09 - 2017.06*, B.E. in the School <a href="http://www.ee.buaa.edu.cn/">Electronic and Information Engineering</a>, <a href="https://www.buaa.edu.cn/">Beihang University</a>, Beijing.
 
+# 💻 Internships
+
+- *2026.07 - Present*, Machine Translation team, Apple
+- *2025.09 - 2026.06*, Multilingual team, Qwen, Alibaba
+
 # 📝 Publications 
+
+- Qwen Team, ["Qwen3.5-Omni Technical Report"](https://arxiv.org/abs/2604.15804) (arXiv 2026)
+
+- **Xi Chen**, Songyang Zhang, Satoshi Nakamura, ["LLaS2S: LLM-Based Speech-to-Speech Translation With Context-Aware Duration Prediction Units"](https://doi.org/10.1109/TASLPRO.2026.3677650) (IEEE Transactions on Audio, Speech and Language Processing, 2026)
+
+- Zeyu Yang, Lai Wei, Roman Koshkin, **Xi Chen**, Satoshi Nakamura, ["SASST: Leveraging Syntax-Aware Chunking and LLMs for Simultaneous Speech Translation"](https://doi.org/10.1609/aaai.v40i40.40733) (AAAI 2026)
+
+- **Xi Chen**, Yuchen Song, Satoshi Nakamura, ["StressTransfer: Stress-Aware Speech-to-Speech Translation with Emphasis Preservation"](https://arxiv.org/abs/2510.13194) (arXiv 2025)
+
+- Pei Zhang, Andong Chen, **Xi Chen**, Baosong Yang, Derek F. Wong, Fei Huang, ["PART: Progressive Alignment Representation Training for Multilingual Speech-To-Text with LLMs"](https://arxiv.org/abs/2509.19745) (arXiv 2025)
 
 - **Xi Chen**, Songyang Zhang, Qibing Bai, Kai Chen, Satoshi Nakamura ["LLaST: Improved End-to-end Speech Translation System Leveraged by Large Language Models"](https://arxiv.org/abs/2407.15415) (Accepted by ACL 2024)
 [![](https://img.shields.io/github/stars/openaudiolab/LLaST?style=social&label=Code+Stars)](https://github.com/openaudiolab/LLaST)
