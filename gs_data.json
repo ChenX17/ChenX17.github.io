@@ -1,0 +1,138 @@
+{
+  "name": "Xi Chen",
+  "scholar_id": "JMDsgOMAAAAJ",
+  "citedby": 514,
+  "updated": "2026-08-08T08:27:23.710465+00:00",
+  "publications": {
+    "JMDsgOMAAAAJ:zYLM7Y9cAGgC": {
+      "author_pub_id": "JMDsgOMAAAAJ:zYLM7Y9cAGgC",
+      "bib": {
+        "title": "Qwen3. 5-omni technical report",
+        "author": "Q Team",
+        "citation": "arXiv preprint arXiv:2604.15804 , 2026",
+        "pub_year": "2026"
+      },
+      "num_citations": 157
+    },
+    "JMDsgOMAAAAJ:2osOgNQ5qMEC": {
+      "author_pub_id": "JMDsgOMAAAAJ:2osOgNQ5qMEC",
+      "bib": {
+        "title": "A 5.1 pJ/neuron 127.3 us/inference RNN-based speech recognition processor using 16 computing-in-memory SRAM macros in 65nm CMOS",
+        "author": "R Guo, Y Liu, S Zheng, SY Wu, P Ouyang, WS Khwa, X Chen, JJ Chen, ...",
+        "citation": "2019 Symposium on VLSI Circuits, C120-C121 , 2019",
+        "pub_year": "2019"
+      },
+      "num_citations": 133
+    },
+    "JMDsgOMAAAAJ:UeHWp8X0CEIC": {
+      "author_pub_id": "JMDsgOMAAAAJ:UeHWp8X0CEIC",
+      "bib": {
+        "title": "Amphion: an open-source audio, music, and speech generation toolkit",
+        "author": "X Zhang, L Xue, Y Gu, Y Wang, J Li, H He, C Wang, S Liu, X Chen, ...",
+        "citation": "2024 IEEE Spoken Language Technology Workshop (SLT), 879-884 , 2024",
+        "pub_year": "2024"
+      },
+      "num_citations": 82
+    },
+    "JMDsgOMAAAAJ:9yKSN-GCB0IC": {
+      "author_pub_id": "JMDsgOMAAAAJ:9yKSN-GCB0IC",
+      "bib": {
+        "title": "Small-footprint keyword spotting with graph convolutional network",
+        "author": "X Chen, S Yin, D Song, P Ouyang, L Liu, S Wei",
+        "citation": "2019 IEEE automatic speech recognition and understanding workshop (ASRU … , 2019",
+        "pub_year": "2019"
+      },
+      "num_citations": 48
+    },
+    "JMDsgOMAAAAJ:IjCSPb-OGe4C": {
+      "author_pub_id": "JMDsgOMAAAAJ:IjCSPb-OGe4C",
+      "bib": {
+        "title": "LLaST: Improved end-to-end speech translation system leveraged by large language models",
+        "author": "X Chen, S Zhang, Q Bai, K Chen, S Nakamura",
+        "citation": "Findings of the Association for Computational Linguistics: ACL 2024, 6976-6987 , 2024",
+        "pub_year": "2024"
+      },
+      "num_citations": 40
+    },
+    "JMDsgOMAAAAJ:u-x6o8ySG0sC": {
+      "author_pub_id": "JMDsgOMAAAAJ:u-x6o8ySG0sC",
+      "bib": {
+        "title": "Transformer with bidirectional decoder for speech recognition",
+        "author": "X Chen, S Zhang, D Song, P Ouyang, S Yin",
+        "citation": "arXiv preprint arXiv:2008.04481 , 2020",
+        "pub_year": "2020"
+      },
+      "num_citations": 31
+    },
+    "JMDsgOMAAAAJ:qjMakFHDy7sC": {
+      "author_pub_id": "JMDsgOMAAAAJ:qjMakFHDy7sC",
+      "bib": {
+        "title": "Transfer the linguistic representations from tts to accent conversion with non-parallel data",
+        "author": "X Chen, J Pei, L Xue, M Zhang",
+        "citation": "ICASSP 2024-2024 IEEE International Conference on Acoustics, Speech and … , 2024",
+        "pub_year": "2024"
+      },
+      "num_citations": 12
+    },
+    "JMDsgOMAAAAJ:YsMSGLbcyi4C": {
+      "author_pub_id": "JMDsgOMAAAAJ:YsMSGLbcyi4C",
+      "bib": {
+        "title": "SASST: Leveraging Syntax-Aware Chunking and LLMs for Simultaneous Speech Translation",
+        "author": "Z Yang, L Wei, R Koshkin, X Chen, S Nakamura",
+        "citation": "Proceedings of the AAAI Conference on Artificial Intelligence 40 (40), 34358 … , 2026",
+        "pub_year": "2026"
+      },
+      "num_citations": 3
+    },
+    "JMDsgOMAAAAJ:u5HHmVD_uO8C": {
+      "author_pub_id": "JMDsgOMAAAAJ:u5HHmVD_uO8C",
+      "bib": {
+        "title": "Sptts: Parallel speech synthesis without extra aligner model",
+        "author": "Z Zhao, X Chen, H Liu, X Wang, L Yang, J Wang",
+        "citation": "2021 Asia-Pacific Signal and Information Processing Association Annual … , 2021",
+        "pub_year": "2021"
+      },
+      "num_citations": 3
+    },
+    "JMDsgOMAAAAJ:d1gkVwhDpl0C": {
+      "author_pub_id": "JMDsgOMAAAAJ:d1gkVwhDpl0C",
+      "bib": {
+        "title": "GLMSnet: Single channel speech separation framework in noisy and reverberant environments",
+        "author": "H Shi, X Chen, T Kong, S Yin, P Ouyang",
+        "citation": "2021 IEEE Automatic Speech Recognition and Understanding Workshop (ASRU … , 2021",
+        "pub_year": "2021"
+      },
+      "num_citations": 3
+    },
+    "JMDsgOMAAAAJ:Y0pCki6q_DkC": {
+      "author_pub_id": "JMDsgOMAAAAJ:Y0pCki6q_DkC",
+      "bib": {
+        "title": "StressTransfer: Stress-Aware Speech-to-Speech Translation with Emphasis Preservation",
+        "author": "X Chen, Y Song, S Nakamura",
+        "citation": "arXiv preprint arXiv:2510.13194 , 2025",
+        "pub_year": "2025"
+      },
+      "num_citations": 2
+    },
+    "JMDsgOMAAAAJ:W7OEmFMy1HYC": {
+      "author_pub_id": "JMDsgOMAAAAJ:W7OEmFMy1HYC",
+      "bib": {
+        "title": "LLaS2S: LLM-Based Speech-to-Speech Translation With Context-Aware Duration Prediction Units",
+        "author": "X Chen, S Zhang, S Nakamura",
+        "citation": "IEEE Transactions on Audio, Speech and Language Processing , 2026",
+        "pub_year": "2026"
+      },
+      "num_citations": 0
+    },
+    "JMDsgOMAAAAJ:Tyk-4Ss8FVUC": {
+      "author_pub_id": "JMDsgOMAAAAJ:Tyk-4Ss8FVUC",
+      "bib": {
+        "title": "PART: Progressive Alignment Representation Training for Multilingual Speech-To-Text with LLMs",
+        "author": "P Zhang, A Chen, X Chen, B Yang, DF Wong, F Huang",
+        "citation": "arXiv preprint arXiv:2509.19745 , 2025",
+        "pub_year": "2025"
+      },
+      "num_citations": 0
+    }
+  }
+}
